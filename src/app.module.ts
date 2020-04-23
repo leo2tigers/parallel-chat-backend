@@ -7,13 +7,17 @@ import { UserModule } from './user/user.module';
 import { MessageModule } from './message/message.module';
 
 @Module({
-  imports: [GroupModule, UserModule, MessageModule,
-    MongooseModule.forRootAsync({
-      useFactory: () => ({
-        uri: process.env.MONGO_URI,
-      })
-    })],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        GroupModule,
+        UserModule,
+        MessageModule,
+        MongooseModule.forRootAsync({
+            useFactory: () => ({
+                uri: process.env.MONGO_URI,
+            }),
+        }),
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}

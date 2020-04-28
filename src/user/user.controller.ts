@@ -1,6 +1,19 @@
-import { Controller, Get, Param, Post, Body, Patch, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Param,
+    Post,
+    Body,
+    Patch,
+    Delete,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, ChangePasswordDto, ChangeDisplayNameDto, JoinOrLeaveChatRoomDto } from './user.dto';
+import {
+    CreateUserDto,
+    ChangePasswordDto,
+    ChangeDisplayNameDto,
+    JoinOrLeaveChatRoomDto,
+} from './user.dto';
 
 @Controller('user')
 export class UserController {
@@ -32,7 +45,9 @@ export class UserController {
     }
 
     @Patch('change-display-name')
-    async changeDisplayName(@Body() changeDisplayNameDto: ChangeDisplayNameDto) {
+    async changeDisplayName(
+        @Body() changeDisplayNameDto: ChangeDisplayNameDto,
+    ) {
         return this.userService.changeDisplayName(changeDisplayNameDto);
     }
 

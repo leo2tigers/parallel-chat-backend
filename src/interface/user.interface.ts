@@ -4,10 +4,8 @@ export interface User extends Document {
     name: string;
     username: string;
     password: string;
-    groupMembership: Array<
-        {
-            id: string;
-            message?: [string];
-        }
-    >;
+    groupMembership: Array<{
+        id: string;
+        message?: [string];
+    }>;
 }

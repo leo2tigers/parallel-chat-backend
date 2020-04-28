@@ -17,5 +17,5 @@ export class ChangeDisplayNameDto {
 
 export class JoinOrLeaveChatRoomDto {
     id: string;
-    chatRoomId: string;
+    chatroomId: string;
 }

@@ -77,7 +77,7 @@ export class UserService {
 
     async joinChatRoom(joinChatRoomDto: JoinOrLeaveChatRoomDto) {
         const user = await this.getUserById(joinChatRoomDto.id);
-        user.groupMembership.push({ id: joinChatRoomDto.chatRoomId });
+        user.groupMembership.push({ id: joinChatRoomDto.chatroomId });
         return user.save();
     }
 
@@ -85,7 +85,7 @@ export class UserService {
         const user = await this.getUserById(leaveChatRoomDto.id);
         const userAfterLeaveChatRoom = user.groupMembership.filter(
             ({ id, message }) => {
-                return id !== leaveChatRoomDto.chatRoomId;
+                return id !== leaveChatRoomDto.chatroomId;
             },
         );
         user.groupMembership = userAfterLeaveChatRoom;

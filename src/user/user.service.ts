@@ -3,7 +3,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../interface/user.interface';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto, ChangePasswordDto, ChangeDisplayNameDto, JoinOrLeaveChatRoomDto } from './user.dto';
+import {
+    CreateUserDto,
+    ChangePasswordDto,
+    ChangeDisplayNameDto,
+    JoinOrLeaveChatRoomDto,
+} from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -18,7 +23,7 @@ export class UserService {
     }
 
     async getUserByUsername(username: string): Promise<User> {
-        return this.userModel.findOne({username});
+        return this.userModel.findOne({ username });
     }
 
     async createNewUser(createUserDto: CreateUserDto): Promise<User> {
@@ -37,20 +42,33 @@ export class UserService {
     }
 
     async changePassword(changePasswordDto: ChangePasswordDto) {
-        if (await bcrypt.compare(changePasswordDto.oldpassword, (await this.getUserById(changePasswordDto.id)).password)) {
+        if (
+            await bcrypt.compare(
+                changePasswordDto.oldpassword,
+                (await this.getUserById(changePasswordDto.id)).password,
+            )
+        ) {
             if (changePasswordDto.newpassword.length < 8) {
                 throw new BadRequestException(`New password is too short`);
             }
-            const hashedPass = await bcrypt.hash(changePasswordDto.newpassword, 10);
-            return this.userModel.findByIdAndUpdate(changePasswordDto.id, {password: hashedPass});
-        }
-        else {
+            const hashedPass = await bcrypt.hash(
+                changePasswordDto.newpassword,
+                10,
+            );
+            return this.userModel.findByIdAndUpdate(changePasswordDto.id, {
+                password: hashedPass,
+            });
+        } else {
             throw new BadRequestException(`Old password is incorrect`);
         }
     }
 
-    async changeDisplayName(changeDisplayNameDto: ChangeDisplayNameDto): Promise<User> {
-        return this.userModel.findByIdAndUpdate(changeDisplayNameDto.id, {name: changeDisplayNameDto.newDisplayname});
+    async changeDisplayName(
+        changeDisplayNameDto: ChangeDisplayNameDto,
+    ): Promise<User> {
+        return this.userModel.findByIdAndUpdate(changeDisplayNameDto.id, {
+            name: changeDisplayNameDto.newDisplayname,
+        });
     }
 
     async deleteUser(id: string) {
@@ -59,15 +77,17 @@ export class UserService {
 
     async joinChatRoom(joinChatRoomDto: JoinOrLeaveChatRoomDto) {
         const user = await this.getUserById(joinChatRoomDto.id);
-        user.groupMembership.push({id: joinChatRoomDto.chatRoomId});
+        user.groupMembership.push({ id: joinChatRoomDto.chatRoomId });
         return user.save();
     }
 
     async leaveChatRoom(leaveChatRoomDto: JoinOrLeaveChatRoomDto) {
         const user = await this.getUserById(leaveChatRoomDto.id);
-        const userAfterLeaveChatRoom = user.groupMembership.filter(({id, message}) => {
-            return id !== leaveChatRoomDto.chatRoomId;
-        });
+        const userAfterLeaveChatRoom = user.groupMembership.filter(
+            ({ id, message }) => {
+                return id !== leaveChatRoomDto.chatRoomId;
+            },
+        );
         user.groupMembership = userAfterLeaveChatRoom;
         return user.save();
     }

@@ -4,10 +4,10 @@ export interface User extends Document {
     name: string;
     username: string;
     password: string;
-    groupMembership: [
+    groupMembership: Array<
         {
-            id: Schema.Types.ObjectId;
-            message: [Schema.Types.ObjectId];
-        },
-    ];
+            id: string;
+            message?: [string];
+        }
+    >;
 }

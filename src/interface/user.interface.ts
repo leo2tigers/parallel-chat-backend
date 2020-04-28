@@ -1,7 +1,9 @@
 import { Document, Schema } from 'mongoose';
 
 export interface User extends Document {
-    name: String;
+    name: string;
+    username: string;
+    password: string;
     groupMembership: [
         {
             id: Schema.Types.ObjectId;

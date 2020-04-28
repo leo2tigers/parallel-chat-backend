@@ -9,16 +9,16 @@ import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
 
 @Module({
-  imports: [
-    UserModule,
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-    JwtModule.registerAsync({
-      useFactory: () => ({
-          secret: `${process.env.JWT_SECRET}`,
-      }),
-  }),
-  ],
-  controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy]
+    imports: [
+        UserModule,
+        MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+        JwtModule.registerAsync({
+            useFactory: () => ({
+                secret: `${process.env.JWT_SECRET}`,
+            }),
+        }),
+    ],
+    controllers: [AuthController],
+    providers: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}

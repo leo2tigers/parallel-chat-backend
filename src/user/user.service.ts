@@ -80,7 +80,14 @@ export class UserService {
         return this.userModel.findByIdAndDelete(id).exec();
     }
 
+    private async checkGroupMembership(userId: string, groupId: string) {
+        return (await this.getUserById(userId)).groupMembership.find(x => x.group === groupId);
+    }
+
     async joinGroup(userId: string, joinGroupDto: JoinOrLeaveGroupDto) {
+        if (await this.checkGroupMembership(userId, joinGroupDto.groupId)) {
+            throw new BadRequestException(`You have already joined this group!`);
+        }
         const user = await this.getUserById(userId);
         const group = await this.groupService.getGroupByGroupId(
             joinGroupDto.groupId,
@@ -91,6 +98,9 @@ export class UserService {
     }
 
     async leaveGroup(userId: string, leaveGroupDto: JoinOrLeaveGroupDto) {
+        if (!(await this.checkGroupMembership(userId, leaveGroupDto.groupId))) {
+            throw new BadRequestException(`You can't leave a group you're not member of!`);
+        }
         const user = await this.getUserById(userId);
         const group = await this.groupService.getGroupByGroupId(
             leaveGroupDto.groupId,

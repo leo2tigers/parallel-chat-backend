@@ -1,6 +1,8 @@
 import { Document, Schema } from 'mongoose';
 
 export interface Group extends Document {
-    name: string;
-    members: [Schema.Types.ObjectId];
+    groupName: string;
+    userId: string;
+    members: Array<string>;
+    messages: Array<string>;
 }

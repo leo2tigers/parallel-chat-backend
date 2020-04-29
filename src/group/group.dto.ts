@@ -1,8 +1,9 @@
 export class CreateGroupDto {
-    name: string;
+    userId: string;
+    groupName: string;
 }
 
 export class ChangeGroupNameDto {
-    id: string;
+    groupId: string;
     newGroupName: string;
 }

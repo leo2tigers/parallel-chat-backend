@@ -20,8 +20,13 @@ export class GroupController {
     }
 
     @Get(':id')
-    async getGroupById(@Param('id') id: string) {
-        return this.groupService.getGroupById(id);
+    async getGroupByGroupId(@Param('id') id: string) {
+        return this.groupService.getGroupByGroupId(id);
+    }
+
+    @Get('/group-list/:userId')
+    async getListGroupByUserId(@Param('userId') userId: string) {
+        return this.groupService.getListGroupByUserId(userId);
     }
 
     @Post()
@@ -37,5 +42,10 @@ export class GroupController {
     @Delete(':id')
     async deleteGroupById(@Param('id') id: string) {
         return this.groupService.deleteGroupById(id);
+    }
+
+    @Delete('delete/all')
+    async deleteAllGroup() {
+        return this.groupService.deleteAllGroup();
     }
 }

@@ -15,6 +15,9 @@ import { AuthModule } from './auth/auth.module';
         MongooseModule.forRootAsync({
             useFactory: () => ({
                 uri: process.env.MONGO_URI,
+                useFindAndModify: false,
+                useUnifiedTopology: true,
+                useNewUrlParser: true,
             }),
         }),
         AuthModule,

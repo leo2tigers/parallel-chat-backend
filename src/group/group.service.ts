@@ -12,27 +12,38 @@ export class GroupService {
         return this.groupModel.find().exec();
     }
 
-    async getGroupById(id: string) {
+    async getGroupByGroupId(id: string) {
         return this.groupModel.findById(id).exec();
     }
 
+    async getListGroupByUserId(userId: string): Promise<Group[]> {
+        return this.groupModel.find({ userId: userId }).exec();
+    }
+
     async createNewGroup(createGroupDto: CreateGroupDto): Promise<Group> {
-        if (createGroupDto.name.length == 0) {
+        if (createGroupDto.groupName.length == 0) {
             throw new BadRequestException('Group name cannot be empty');
         }
         const createdGroup = new this.groupModel(createGroupDto);
-        return createdGroup.save();
+        await createdGroup.save();
+        return this.groupModel.findByIdAndUpdate(createdGroup._id, {
+            $push: { members: createdGroup.userId },
+        });
     }
 
     async changeGroupName(
         changeGroupNameDto: ChangeGroupNameDto,
     ): Promise<Group> {
-        return this.groupModel.findByIdAndUpdate(changeGroupNameDto.id, {
-            name: changeGroupNameDto.newGroupName,
+        return this.groupModel.findByIdAndUpdate(changeGroupNameDto.groupId, {
+            groupName: changeGroupNameDto.newGroupName,
         });
     }
 
     async deleteGroupById(id: string) {
         return this.groupModel.findByIdAndDelete(id);
+    }
+
+    async deleteAllGroup() {
+        return this.groupModel.collection.drop();
     }
 }

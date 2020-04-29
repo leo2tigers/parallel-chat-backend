@@ -1,7 +1,8 @@
 import { Schema } from 'mongoose';
 
 export const GroupSchema = new Schema({
-    name: String,
+    groupName: String,
+    userId: Schema.Types.ObjectId,
     members: [Schema.Types.ObjectId],
     messages: [Schema.Types.ObjectId],
 });

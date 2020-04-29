@@ -3,6 +3,7 @@ import { Group } from 'src/interface/group.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateGroupDto, ChangeGroupNameDto } from './group.dto';
+import { log } from 'util';
 
 @Injectable()
 export class GroupService {
@@ -16,8 +17,8 @@ export class GroupService {
         return this.groupModel.findById(id).exec();
     }
 
-    async getListGroupByUserId(userId: string): Promise<Group[]> {
-        return this.groupModel.find({ userId: userId }).exec();
+    async getListGroupByCreatorId(creatorId: string): Promise<Group[]> {
+        return this.groupModel.find({ creatorId: creatorId }).exec();
     }
 
     async createNewGroup(createGroupDto: CreateGroupDto): Promise<Group> {
@@ -27,7 +28,7 @@ export class GroupService {
         const createdGroup = new this.groupModel(createGroupDto);
         await createdGroup.save();
         return this.groupModel.findByIdAndUpdate(createdGroup._id, {
-            $push: { members: createdGroup.userId },
+            $push: { members: createdGroup.creatorId },
         });
     }
 

@@ -15,7 +15,7 @@ export class ChangeDisplayNameDto {
     newDisplayname: string;
 }
 
-export class JoinOrLeaveChatRoomDto {
+export class JoinOrLeaveGroupDto {
     id: string;
-    chatroomId: string;
+    groupId: string;
 }

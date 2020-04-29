@@ -7,7 +7,7 @@ import {
     CreateUserDto,
     ChangePasswordDto,
     ChangeDisplayNameDto,
-    JoinOrLeaveChatRoomDto,
+    JoinOrLeaveGroupDto,
 } from './user.dto';
 import { GroupService } from '../group/group.service';
 
@@ -79,31 +79,31 @@ export class UserService {
         return this.userModel.findByIdAndDelete(id).exec();
     }
 
-    async joinChatRoom(joinChatRoomDto: JoinOrLeaveChatRoomDto) {
-        const user = await this.getUserById(joinChatRoomDto.id);
+    async joinGroup(joinGroupDto: JoinOrLeaveGroupDto) {
+        const user = await this.getUserById(joinGroupDto.id);
         const group = await this.groupService.getGroupByGroupId(
-            joinChatRoomDto.chatroomId,
+            joinGroupDto.groupId,
         );
-        user.groupMembership.push({ group: joinChatRoomDto.chatroomId });
-        group.members.push(joinChatRoomDto.id);
+        user.groupMembership.push({ group: joinGroupDto.groupId });
+        group.members.push(joinGroupDto.id);
         return [await user.save(), await group.save()];
     }
 
-    async leaveChatRoom(leaveChatRoomDto: JoinOrLeaveChatRoomDto) {
-        const user = await this.getUserById(leaveChatRoomDto.id);
+    async leaveGroup(leaveGroupDto: JoinOrLeaveGroupDto) {
+        const user = await this.getUserById(leaveGroupDto.id);
         const group = await this.groupService.getGroupByGroupId(
-            leaveChatRoomDto.chatroomId,
+            leaveGroupDto.groupId,
         );
-        const userAfterLeaveChatRoom = user.groupMembership.filter(
+        const userAfterLeaveGroup = user.groupMembership.filter(
             ({ group, lastAccess }) => {
-                return group !== leaveChatRoomDto.chatroomId;
+                return group !== leaveGroupDto.groupId;
             },
         );
-        const groupAfterLeaveChatroom = group.members.filter(member => {
-            return member !== leaveChatRoomDto.id;
+        const groupAfterLeaveGroup = group.members.filter(member => {
+            return member !== leaveGroupDto.id;
         });
-        user.groupMembership = userAfterLeaveChatRoom;
-        group.members = groupAfterLeaveChatroom;
+        user.groupMembership = userAfterLeaveGroup;
+        group.members = groupAfterLeaveGroup;
         return [await user.save(), await group.save()];
     }
 }

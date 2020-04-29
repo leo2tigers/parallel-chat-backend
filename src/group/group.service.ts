@@ -16,8 +16,8 @@ export class GroupService {
         return this.groupModel.findById(id).exec();
     }
 
-    async getListGroupByCreator(creatorId: string): Promise<Group[]> {
-        return this.groupModel.find({ creator: creatorId }).exec();
+    async getListGroupByCreatorId(creator: string): Promise<Group[]> {
+        return this.groupModel.find({ creator: creator }).exec();
     }
 
     async createNewGroup(createGroupDto: CreateGroupDto): Promise<Group> {

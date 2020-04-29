@@ -42,8 +42,4 @@ export class GroupService {
     async deleteGroupById(id: string) {
         return this.groupModel.findByIdAndDelete(id);
     }
-
-    async deleteAllGroup() {
-        return this.groupModel.collection.drop();
-    }
 }

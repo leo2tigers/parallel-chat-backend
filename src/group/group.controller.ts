@@ -43,9 +43,4 @@ export class GroupController {
     async deleteGroupById(@Param('id') id: string) {
         return this.groupService.deleteGroupById(id);
     }
-
-    @Delete('delete/all')
-    async deleteAllGroup() {
-        return this.groupService.deleteAllGroup();
-    }
 }

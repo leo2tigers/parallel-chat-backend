@@ -16,8 +16,10 @@ export class GroupService {
         return this.groupModel.findById(id).exec();
     }
 
-    async getListGroupByCreatorId(creator: string): Promise<Group[]> {
-        return this.groupModel.find({ creator: creator }).exec();
+    async getListGroupByMember(memberId: string): Promise<Group[]> {
+        return this.groupModel
+            .find({ members: { $elemMatch: { $eq: memberId } } })
+            .exec();
     }
 
     async createNewGroup(createGroupDto: CreateGroupDto): Promise<Group> {
@@ -34,6 +36,9 @@ export class GroupService {
     async changeGroupName(
         changeGroupNameDto: ChangeGroupNameDto,
     ): Promise<Group> {
+        if (changeGroupNameDto.newGroupName.length === 0) {
+            throw new BadRequestException(`Group name cannot be empty`);
+        }
         return this.groupModel.findByIdAndUpdate(changeGroupNameDto.groupId, {
             groupName: changeGroupNameDto.newGroupName,
         });

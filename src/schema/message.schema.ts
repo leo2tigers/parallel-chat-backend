@@ -2,7 +2,8 @@ import { Schema } from 'mongoose';
 
 export const MessageSchema = new Schema({
     message: String,
-    sender: Schema.Types.ObjectId,
-    group: Schema.Types.ObjectId,
-    timeSent: { type: Date, default: Date.now() },
+    sender: { type: Schema.Types.ObjectId, ref: 'User'},
+    group: { type: Schema.Types.ObjectId, ref: 'Group'},
+}, {
+    timestamps: true
 });

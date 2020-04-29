@@ -6,8 +6,8 @@ export const UserSchema = new Schema({
     password: String,
     groupMembership: [
         {
-            id: Schema.Types.ObjectId,
-            message: [Schema.Types.ObjectId],
+            id: {type: Schema.Types.ObjectId, ref: 'Group'},
+            lastAccess: {type: Date, default: new Date(0)}
         },
     ],
 });

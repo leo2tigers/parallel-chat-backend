@@ -5,17 +5,14 @@ export class CreateUserDto {
 }
 
 export class ChangePasswordDto {
-    id: string;
     oldpassword: string;
     newpassword: string;
 }
 
 export class ChangeDisplayNameDto {
-    id: string;
     newDisplayname: string;
 }
 
 export class JoinOrLeaveGroupDto {
-    id: string;
     groupId: string;
 }

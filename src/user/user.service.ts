@@ -45,11 +45,11 @@ export class UserService {
         return createdUser.save();
     }
 
-    async changePassword(changePasswordDto: ChangePasswordDto) {
+    async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
         if (
             await bcrypt.compare(
                 changePasswordDto.oldpassword,
-                (await this.getUserById(changePasswordDto.id)).password,
+                (await this.getUserById(userId)).password,
             )
         ) {
             if (changePasswordDto.newpassword.length < 8) {
@@ -59,7 +59,7 @@ export class UserService {
                 changePasswordDto.newpassword,
                 10,
             );
-            return this.userModel.findByIdAndUpdate(changePasswordDto.id, {
+            return this.userModel.findByIdAndUpdate(userId, {
                 password: hashedPass,
             });
         } else {
@@ -68,9 +68,10 @@ export class UserService {
     }
 
     async changeDisplayName(
+        userId: string,
         changeDisplayNameDto: ChangeDisplayNameDto,
     ): Promise<User> {
-        return this.userModel.findByIdAndUpdate(changeDisplayNameDto.id, {
+        return this.userModel.findByIdAndUpdate(userId, {
             name: changeDisplayNameDto.newDisplayname,
         });
     }
@@ -79,18 +80,18 @@ export class UserService {
         return this.userModel.findByIdAndDelete(id).exec();
     }
 
-    async joinGroup(joinGroupDto: JoinOrLeaveGroupDto) {
-        const user = await this.getUserById(joinGroupDto.id);
+    async joinGroup(userId: string, joinGroupDto: JoinOrLeaveGroupDto) {
+        const user = await this.getUserById(userId);
         const group = await this.groupService.getGroupByGroupId(
             joinGroupDto.groupId,
         );
         user.groupMembership.push({ group: joinGroupDto.groupId });
-        group.members.push(joinGroupDto.id);
+        group.members.push(userId);
         return [await user.save(), await group.save()];
     }
 
-    async leaveGroup(leaveGroupDto: JoinOrLeaveGroupDto) {
-        const user = await this.getUserById(leaveGroupDto.id);
+    async leaveGroup(userId: string, leaveGroupDto: JoinOrLeaveGroupDto) {
+        const user = await this.getUserById(userId);
         const group = await this.groupService.getGroupByGroupId(
             leaveGroupDto.groupId,
         );
@@ -100,7 +101,7 @@ export class UserService {
             },
         );
         const groupAfterLeaveGroup = group.members.filter(member => {
-            return member !== leaveGroupDto.id;
+            return member !== userId;
         });
         user.groupMembership = userAfterLeaveGroup;
         group.members = groupAfterLeaveGroup;

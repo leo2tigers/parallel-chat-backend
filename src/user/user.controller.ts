@@ -12,7 +12,7 @@ import {
     CreateUserDto,
     ChangePasswordDto,
     ChangeDisplayNameDto,
-    JoinOrLeaveChatRoomDto,
+    JoinOrLeaveGroupDto,
 } from './user.dto';
 
 @Controller('user')
@@ -56,13 +56,13 @@ export class UserController {
         return this.userService.deleteUser(id);
     }
 
-    @Post('chatroom')
-    async joinChatRoom(@Body() joinChatRoomDto: JoinOrLeaveChatRoomDto) {
-        return this.userService.joinChatRoom(joinChatRoomDto);
+    @Post('group')
+    async joinGroup(@Body() joinGroupDto: JoinOrLeaveGroupDto) {
+        return this.userService.joinGroup(joinGroupDto);
     }
 
-    @Delete('chatroom')
-    async leaveChatRoom(@Body() leaveChatRoomDto: JoinOrLeaveChatRoomDto) {
-        return this.userService.leaveChatRoom(leaveChatRoomDto);
+    @Delete('group')
+    async leaveGroup(@Body() leaveGroupDto: JoinOrLeaveGroupDto) {
+        return this.userService.leaveGroup(leaveGroupDto);
     }
 }

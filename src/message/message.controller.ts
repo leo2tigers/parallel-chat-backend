@@ -22,7 +22,10 @@ export class MessageController {
     }
 
     @Get('unread/:group/:sender')
-    async getUnreadMessageByGroup(@Param('group') groupId: string, @Param('sender') senderId: string) {
+    async getUnreadMessageByGroup(
+        @Param('group') groupId: string,
+        @Param('sender') senderId: string,
+    ) {
         return this.messageService.getUnreadMessageByGroup(groupId, senderId);
     }
 

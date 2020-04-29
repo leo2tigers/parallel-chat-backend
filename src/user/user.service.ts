@@ -109,7 +109,9 @@ export class UserService {
 
     async updateLastReadOfAGroup(userId: string, groupId: string) {
         const user = await this.getUserById(userId);
-        const idx = user.groupMembership.findIndex(element => element.group === groupId);
+        const idx = user.groupMembership.findIndex(
+            element => element.group === groupId,
+        );
         user.groupMembership[idx].lastAccess = new Date();
         return user.save();
     }

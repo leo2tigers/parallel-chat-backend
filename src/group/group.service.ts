@@ -12,17 +12,17 @@ export class GroupService {
         return this.groupModel.find().exec();
     }
 
-    async getGroupByGroupId(id: string) {
+    async getGroupByGroupId(id: string): Promise<Group> {
         return this.groupModel.findById(id).exec();
     }
 
-    async getListGroupByUserId(userId: string): Promise<Group[]> {
-        return this.groupModel.find({ userId: userId }).exec();
+    async getListGroupByCreator(creatorId: string): Promise<Group[]> {
+        return this.groupModel.find({ creator: creatorId }).exec();
     }
 
     async createNewGroup(createGroupDto: CreateGroupDto): Promise<Group> {
-        if (createGroupDto.groupName.length == 0) {
-            throw new BadRequestException('Group name cannot be empty');
+        if (createGroupDto.groupName.length === 0) {
+            throw new BadRequestException(`Group name cannot be empty`);
         }
         const createdGroup = new this.groupModel(createGroupDto);
         await createdGroup.save();

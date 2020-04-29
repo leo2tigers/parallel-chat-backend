@@ -106,4 +106,11 @@ export class UserService {
         group.members = groupAfterLeaveGroup;
         return [await user.save(), await group.save()];
     }
+
+    async updateLastReadOfAGroup(userId: string, groupId: string) {
+        const user = await this.getUserById(userId);
+        const idx = user.groupMembership.findIndex(element => element.group === groupId);
+        user.groupMembership[idx].lastAccess = new Date();
+        return user.save();
+    }
 }

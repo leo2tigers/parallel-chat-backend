@@ -44,7 +44,10 @@ export class UserController {
 
     @UseGuards(AuthGuard())
     @Patch('change-password')
-    async changePassword(@LoadUser() user: any, @Body() changePasswordDto: ChangePasswordDto) {
+    async changePassword(
+        @LoadUser() user: any,
+        @Body() changePasswordDto: ChangePasswordDto,
+    ) {
         return this.userService.changePassword(user.id, changePasswordDto);
     }
 
@@ -54,7 +57,10 @@ export class UserController {
         @LoadUser() user: any,
         @Body() changeDisplayNameDto: ChangeDisplayNameDto,
     ) {
-        return this.userService.changeDisplayName(user.id, changeDisplayNameDto);
+        return this.userService.changeDisplayName(
+            user.id,
+            changeDisplayNameDto,
+        );
     }
 
     @Delete(':id')
@@ -64,13 +70,19 @@ export class UserController {
 
     @UseGuards(AuthGuard())
     @Post('group')
-    async joinGroup(@LoadUser() user: any, @Body() joinGroupDto: JoinOrLeaveGroupDto) {
+    async joinGroup(
+        @LoadUser() user: any,
+        @Body() joinGroupDto: JoinOrLeaveGroupDto,
+    ) {
         return this.userService.joinGroup(user.id, joinGroupDto);
     }
 
     @UseGuards(AuthGuard())
     @Delete('group')
-    async leaveGroup(@LoadUser() user: any, @Body() leaveGroupDto: JoinOrLeaveGroupDto) {
+    async leaveGroup(
+        @LoadUser() user: any,
+        @Body() leaveGroupDto: JoinOrLeaveGroupDto,
+    ) {
         return this.userService.leaveGroup(user.id, leaveGroupDto);
     }
 }

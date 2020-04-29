@@ -6,6 +6,7 @@ import {
     Body,
     Patch,
     Delete,
+    UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
@@ -14,6 +15,8 @@ import {
     ChangeDisplayNameDto,
     JoinOrLeaveGroupDto,
 } from './user.dto';
+import { LoadUser } from 'src/decorators/user.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -39,16 +42,19 @@ export class UserController {
         return this.userService.createNewUser(createUserDto);
     }
 
+    @UseGuards(AuthGuard())
     @Patch('change-password')
-    async changePassword(@Body() changePasswordDto: ChangePasswordDto) {
-        return this.userService.changePassword(changePasswordDto);
+    async changePassword(@LoadUser() user: any, @Body() changePasswordDto: ChangePasswordDto) {
+        return this.userService.changePassword(user.id, changePasswordDto);
     }
 
+    @UseGuards(AuthGuard())
     @Patch('change-display-name')
     async changeDisplayName(
+        @LoadUser() user: any,
         @Body() changeDisplayNameDto: ChangeDisplayNameDto,
     ) {
-        return this.userService.changeDisplayName(changeDisplayNameDto);
+        return this.userService.changeDisplayName(user.id, changeDisplayNameDto);
     }
 
     @Delete(':id')
@@ -56,13 +62,15 @@ export class UserController {
         return this.userService.deleteUser(id);
     }
 
+    @UseGuards(AuthGuard())
     @Post('group')
-    async joinGroup(@Body() joinGroupDto: JoinOrLeaveGroupDto) {
-        return this.userService.joinGroup(joinGroupDto);
+    async joinGroup(@LoadUser() user: any, @Body() joinGroupDto: JoinOrLeaveGroupDto) {
+        return this.userService.joinGroup(user.id, joinGroupDto);
     }
 
+    @UseGuards(AuthGuard())
     @Delete('group')
-    async leaveGroup(@Body() leaveGroupDto: JoinOrLeaveGroupDto) {
-        return this.userService.leaveGroup(leaveGroupDto);
+    async leaveGroup(@LoadUser() user: any, @Body() leaveGroupDto: JoinOrLeaveGroupDto) {
+        return this.userService.leaveGroup(user.id, leaveGroupDto);
     }
 }

@@ -13,7 +13,10 @@ import { GroupService } from '../group/group.service';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel('User') private userModel: Model<User>, private readonly groupService: GroupService) {}
+    constructor(
+        @InjectModel('User') private userModel: Model<User>,
+        private readonly groupService: GroupService,
+    ) {}
 
     async getAllUsers(): Promise<User[]> {
         return this.userModel.find().exec();
@@ -78,7 +81,9 @@ export class UserService {
 
     async joinChatRoom(joinChatRoomDto: JoinOrLeaveChatRoomDto) {
         const user = await this.getUserById(joinChatRoomDto.id);
-        const group = await this.groupService.getGroupByGroupId(joinChatRoomDto.chatroomId);
+        const group = await this.groupService.getGroupByGroupId(
+            joinChatRoomDto.chatroomId,
+        );
         user.groupMembership.push({ group: joinChatRoomDto.chatroomId });
         group.members.push(joinChatRoomDto.id);
         return [await user.save(), await group.save()];
@@ -86,17 +91,17 @@ export class UserService {
 
     async leaveChatRoom(leaveChatRoomDto: JoinOrLeaveChatRoomDto) {
         const user = await this.getUserById(leaveChatRoomDto.id);
-        const group = await this.groupService.getGroupByGroupId(leaveChatRoomDto.chatroomId);
+        const group = await this.groupService.getGroupByGroupId(
+            leaveChatRoomDto.chatroomId,
+        );
         const userAfterLeaveChatRoom = user.groupMembership.filter(
             ({ group, lastAccess }) => {
                 return group !== leaveChatRoomDto.chatroomId;
             },
         );
-        const groupAfterLeaveChatroom = group.members.filter(
-            (member) => {
-                return member !== leaveChatRoomDto.id;
-            }
-        )
+        const groupAfterLeaveChatroom = group.members.filter(member => {
+            return member !== leaveChatRoomDto.id;
+        });
         user.groupMembership = userAfterLeaveChatRoom;
         group.members = groupAfterLeaveChatroom;
         return [await user.save(), await group.save()];

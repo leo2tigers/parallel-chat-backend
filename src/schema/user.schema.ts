@@ -6,8 +6,8 @@ export const UserSchema = new Schema({
     password: String,
     groupMembership: [
         {
-            group: {type: Schema.Types.ObjectId, ref: 'Group'},
-            lastAccess: {type: Date, default: new Date(0)}
+            group: { type: Schema.Types.ObjectId, ref: 'Group' },
+            lastAccess: { type: Date, default: new Date(0) },
         },
     ],
 });

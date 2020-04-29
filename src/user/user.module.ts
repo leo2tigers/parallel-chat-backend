@@ -8,7 +8,7 @@ import { GroupModule } from '../group/group.module';
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-        GroupModule
+        GroupModule,
     ],
     controllers: [UserController],
     providers: [UserService],

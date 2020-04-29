@@ -24,9 +24,9 @@ export class GroupController {
         return this.groupService.getGroupByGroupId(id);
     }
 
-    @Get('/group-list/:userId')
-    async getListGroupByUserId(@Param('userId') userId: string) {
-        return this.groupService.getListGroupByUserId(userId);
+    @Get('/group-list/:creatorId')
+    async getListGroupByUserId(@Param('creatorId') creatorId: string) {
+        return this.groupService.getListGroupByCreator(creatorId);
     }
 
     @Post()

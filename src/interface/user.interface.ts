@@ -5,7 +5,7 @@ export interface User extends Document {
     username: string;
     password: string;
     groupMembership: Array<{
-        id: string;
-        message?: [string];
+        group: string;
+        lastAccess?: Date;
     }>;
 }

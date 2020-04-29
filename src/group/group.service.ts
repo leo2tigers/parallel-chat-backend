@@ -27,7 +27,7 @@ export class GroupService {
         const createdGroup = new this.groupModel(createGroupDto);
         await createdGroup.save();
         return this.groupModel.findByIdAndUpdate(createdGroup._id, {
-            $push: { members: createdGroup.userId },
+            $push: { members: createdGroup.creator },
         });
     }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Message } from '../interface/message.interface';
@@ -45,7 +45,13 @@ export class MessageService {
         return messages;
     }
 
-    async newMessage(newMessageDto: NewMessageDto) {
+    async newMessage(newMessageDto: NewMessageDto, sender?: string) {
+        if (sender) {
+            newMessageDto.sender = sender;
+        }
+        if (!newMessageDto.sender || !newMessageDto.group) {
+            throw new BadRequestException(`Sender ID and/or target group ID not found in request.`)
+        }
         const message = new this.messageModel(newMessageDto);
         return message.save();
     }

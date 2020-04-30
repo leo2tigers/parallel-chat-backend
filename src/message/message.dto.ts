@@ -1,5 +1,5 @@
 export class NewMessageDto {
     message: string;
-    sender: string;
+    sender?: string;
     group: string;
 }

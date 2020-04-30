@@ -1,6 +1,8 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, UseGuards } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { NewMessageDto } from './message.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { LoadUser } from 'src/decorators/user.decorator';
 
 @Controller('message')
 export class MessageController {
@@ -21,16 +23,18 @@ export class MessageController {
         return this.messageService.getMessageBySender(senderId);
     }
 
-    @Get('unread/:group/:sender')
+    @UseGuards(AuthGuard())
+    @Get('unread/:group')
     async getUnreadMessageByGroup(
+        @LoadUser() user: any,
         @Param('group') groupId: string,
-        @Param('sender') senderId: string,
     ) {
-        return this.messageService.getUnreadMessageByGroup(groupId, senderId);
+        return this.messageService.getUnreadMessageByGroup(groupId, user.id);
     }
 
+    @UseGuards(AuthGuard())
     @Post()
-    async newMessage(@Body() newMessageDto: NewMessageDto) {
-        return this.messageService.newMessage(newMessageDto);
+    async newMessage(@LoadUser() user: any, @Body() newMessageDto: NewMessageDto) {
+        return this.messageService.newMessage(newMessageDto, user.id);
     }
 }

@@ -78,7 +78,7 @@ export class UserController {
     }
 
     @UseGuards(AuthGuard())
-    @Delete('group')
+    @Patch('group')
     async leaveGroup(
         @LoadUser() user: any,
         @Body() leaveGroupDto: JoinOrLeaveGroupDto,

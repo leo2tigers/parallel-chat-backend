@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../interface/user.interface';
@@ -98,6 +98,9 @@ export class UserService {
         const group = await this.groupService.getGroupByGroupId(
             joinGroupDto.groupId,
         );
+        if (!group) {
+            throw new NotFoundException(`This group does not exist!`);
+        }
         user.groupMembership.push({ group: joinGroupDto.groupId });
         group.members.push(userId);
         return [await user.save(), await group.save()];

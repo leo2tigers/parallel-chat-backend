@@ -7,6 +7,7 @@ import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
     imports: [
@@ -15,6 +16,11 @@ import { JwtStrategy } from './jwt.strategy';
         JwtModule.registerAsync({
             useFactory: () => ({
                 secret: `${process.env.JWT_SECRET}`,
+            }),
+        }),
+        PassportModule.registerAsync({
+            useFactory: () => ({
+                defaultStrategy: 'jwt',
             }),
         }),
     ],

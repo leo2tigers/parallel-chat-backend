@@ -6,9 +6,12 @@ import {
     Body,
     Patch,
     Delete,
+    UseGuards,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto, ChangeGroupNameDto } from './group.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { LoadUser } from '../decorators/user.decorator';
 
 @Controller('group')
 export class GroupController {
@@ -29,9 +32,10 @@ export class GroupController {
         return this.groupService.getListGroupByMember(memberId);
     }
 
+    @UseGuards(AuthGuard())
     @Post()
-    async createNewGroup(@Body() createGroupDto: CreateGroupDto) {
-        return this.groupService.createNewGroup(createGroupDto);
+    async createNewGroup(@LoadUser() user: any, @Body() createGroupDto: CreateGroupDto) {
+        return this.groupService.createNewGroup(createGroupDto, user.id);
     }
 
     @Patch()

@@ -28,7 +28,10 @@ export class GroupService {
             .exec();
     }
 
-    async createNewGroup(createGroupDto: CreateGroupDto): Promise<Group> {
+    async createNewGroup(createGroupDto: CreateGroupDto, creator?: string): Promise<Group> {
+        if (creator) {
+            createGroupDto.creator = creator;
+        }
         if (createGroupDto.groupName.length === 0) {
             throw new BadRequestException(`Group name cannot be empty`);
         }

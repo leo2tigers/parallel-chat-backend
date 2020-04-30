@@ -123,7 +123,14 @@ export class UserService {
         });
         user.groupMembership = userAfterLeaveGroup;
         group.members = groupAfterLeaveGroup;
-        return [await user.save(), await group.save()];
+        let groupRet: any;
+        if (groupAfterLeaveGroup.length === 0) {
+            groupRet = await this.groupService.deleteGroupById(leaveGroupDto.groupId);
+        }
+        else {
+            groupRet = group.save()
+        }
+        return [await user.save(), groupRet];
     }
 
     async updateLastReadOfAGroup(userId: string, groupId: string) {

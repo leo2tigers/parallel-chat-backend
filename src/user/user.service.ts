@@ -80,7 +80,7 @@ export class UserService {
         return this.userModel.findByIdAndDelete(id).exec();
     }
 
-    private async checkGroupMembership(userId: string, groupId: string) {
+    async checkGroupMembership(userId: string, groupId: string) {
         const user = await this.getUserById(userId);
         const ret = user.groupMembership.find(x => {
             return x.group.toString() === groupId;
@@ -139,7 +139,7 @@ export class UserService {
     async updateLastReadOfAGroup(userId: string, groupId: string) {
         const user = await this.getUserById(userId);
         const idx = user.groupMembership.findIndex(
-            element => element.group === groupId,
+            element => element.group.toString() === groupId,
         );
         user.groupMembership[idx].lastAccess = new Date();
         return user.save();

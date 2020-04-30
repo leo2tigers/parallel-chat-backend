@@ -1,12 +1,17 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { Group } from 'src/interface/group.interface';
+import { Group } from '../interface/group.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateGroupDto, ChangeGroupNameDto } from './group.dto';
+import { UserService } from '../user/user.service';
+import { User } from '../interface/user.interface';
 
 @Injectable()
 export class GroupService {
-    constructor(@InjectModel('Group') private groupModel: Model<Group>) {}
+    constructor(
+        @InjectModel('Group') private groupModel: Model<Group>,
+        @InjectModel('User') private userModel: Model<User>,
+    ) {}
 
     async getAllGroup(): Promise<Group[]> {
         return this.groupModel.find().exec();
@@ -28,6 +33,9 @@ export class GroupService {
         }
         const createdGroup = new this.groupModel(createGroupDto);
         await createdGroup.save();
+        await this.userModel.findByIdAndUpdate(createGroupDto.creator, {
+            $push: { groupMembership: { group: createdGroup._id }}
+        });
         return this.groupModel.findByIdAndUpdate(createdGroup._id, {
             $push: { members: createdGroup.creator },
         });

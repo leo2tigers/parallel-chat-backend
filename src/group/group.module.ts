@@ -12,7 +12,7 @@ import { PassportModule } from '@nestjs/passport';
         MongooseModule.forFeature([
             { name: 'Group', schema: GroupSchema },
             { name: 'User', schema: UserSchema },
-            { name: 'Message', schema: MessageSchema}
+            { name: 'Message', schema: MessageSchema },
         ]),
         PassportModule.registerAsync({
             useFactory: () => ({

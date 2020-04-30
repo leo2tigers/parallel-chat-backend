@@ -34,7 +34,10 @@ export class GroupController {
 
     @UseGuards(AuthGuard())
     @Post()
-    async createNewGroup(@LoadUser() user: any, @Body() createGroupDto: CreateGroupDto) {
+    async createNewGroup(
+        @LoadUser() user: any,
+        @Body() createGroupDto: CreateGroupDto,
+    ) {
         return this.groupService.createNewGroup(createGroupDto, user.id);
     }
 

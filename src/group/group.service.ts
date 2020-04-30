@@ -28,7 +28,10 @@ export class GroupService {
             .exec();
     }
 
-    async createNewGroup(createGroupDto: CreateGroupDto, creator?: string): Promise<Group> {
+    async createNewGroup(
+        createGroupDto: CreateGroupDto,
+        creator?: string,
+    ): Promise<Group> {
         if (creator) {
             createGroupDto.creator = creator;
         }
@@ -38,7 +41,7 @@ export class GroupService {
         const createdGroup = new this.groupModel(createGroupDto);
         await createdGroup.save();
         await this.userModel.findByIdAndUpdate(createGroupDto.creator, {
-            $push: { groupMembership: { group: createdGroup._id }}
+            $push: { groupMembership: { group: createdGroup._id } },
         });
         return this.groupModel.findByIdAndUpdate(createdGroup._id, {
             $push: { members: createdGroup.creator },
@@ -57,21 +60,23 @@ export class GroupService {
     }
 
     async deleteGroupById(id: string) {
-        const userInGroup = await this.userModel.find({
+        const userInGroup = await this.userModel
+            .find({
                 'groupMembership.group': id,
-                'groupMembership.lastAccess': { $gte: new Date(-100)}
-            }).exec()
+                'groupMembership.lastAccess': { $gte: new Date(-100) },
+            })
+            .exec();
         userInGroup.forEach(user => {
             user.groupMembership = user.groupMembership.filter(
                 ({ group, lastAccess }) => {
                     return group.toString() !== id;
                 },
-            )
-        })
+            );
+        });
         userInGroup.forEach(async user => {
             await user.save();
-        })
-        await this.messageModel.deleteMany({group: id});
+        });
+        await this.messageModel.deleteMany({ group: id });
         return this.groupModel.findByIdAndDelete(id);
     }
 }

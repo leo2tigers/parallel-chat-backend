@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+    Injectable,
+    BadRequestException,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../interface/user.interface';
@@ -84,7 +88,7 @@ export class UserService {
         const user = await this.getUserById(userId);
         const ret = user.groupMembership.find(x => {
             return x.group.toString() === groupId;
-        })
+        });
         return ret;
     }
 
@@ -128,10 +132,11 @@ export class UserService {
         group.members = groupAfterLeaveGroup;
         let groupRet: any;
         if (groupAfterLeaveGroup.length === 0) {
-            groupRet = await this.groupService.deleteGroupById(leaveGroupDto.groupId);
-        }
-        else {
-            groupRet = group.save()
+            groupRet = await this.groupService.deleteGroupById(
+                leaveGroupDto.groupId,
+            );
+        } else {
+            groupRet = group.save();
         }
         return [await user.save(), groupRet];
     }

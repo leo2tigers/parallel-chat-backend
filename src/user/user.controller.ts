@@ -15,7 +15,7 @@ import {
     ChangeDisplayNameDto,
     JoinOrLeaveGroupDto,
 } from './user.dto';
-import { LoadUser } from 'src/decorators/user.decorator';
+import { LoadUser } from '../decorators/user.decorator';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')

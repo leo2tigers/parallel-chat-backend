@@ -81,11 +81,6 @@ export class UserService {
     }
 
     private async checkGroupMembership(userId: string, groupId: string) {
-        console.log((await this.getUserById(userId)).groupMembership.find(
-            x => {
-                x.group.toString() === groupId;
-            },
-        ));
         const user = await this.getUserById(userId);
         const ret = user.groupMembership.find(x => {
             return x.group.toString() === groupId;

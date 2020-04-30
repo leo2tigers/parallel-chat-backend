@@ -27,7 +27,8 @@ export class MessageService {
     private async getLastReadTimeOfAGroup(groupId: string, senderId: string) {
         return (
             await this.userService.getUserById(senderId)
-        ).groupMembership.find(element => element.group.toString() === groupId).lastAccess;
+        ).groupMembership.find(element => element.group.toString() === groupId)
+            .lastAccess;
     }
 
     async getUnreadMessageByGroup(
@@ -50,11 +51,20 @@ export class MessageService {
             newMessageDto.sender = sender;
         }
         if (!newMessageDto.sender || !newMessageDto.group) {
-            throw new BadRequestException(`Sender ID and/or target group ID not found in request.`)
+            throw new BadRequestException(
+                `Sender ID and/or target group ID not found in request.`,
+            );
         }
-        if (!await this.userService.checkGroupMembership(newMessageDto.sender, newMessageDto.group)) {
-            throw new BadRequestException(`This user is not in the requested group`)
-        };
+        if (
+            !(await this.userService.checkGroupMembership(
+                newMessageDto.sender,
+                newMessageDto.group,
+            ))
+        ) {
+            throw new BadRequestException(
+                `This user is not in the requested group`,
+            );
+        }
         const message = new this.messageModel(newMessageDto);
         return message.save();
     }

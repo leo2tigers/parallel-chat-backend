@@ -34,7 +34,10 @@ export class MessageController {
 
     @UseGuards(AuthGuard())
     @Post()
-    async newMessage(@LoadUser() user: any, @Body() newMessageDto: NewMessageDto) {
+    async newMessage(
+        @LoadUser() user: any,
+        @Body() newMessageDto: NewMessageDto,
+    ) {
         return this.messageService.newMessage(newMessageDto, user.id);
     }
 }

@@ -115,11 +115,11 @@ export class UserService {
         );
         const userAfterLeaveGroup = user.groupMembership.filter(
             ({ group, lastAccess }) => {
-                return group !== leaveGroupDto.groupId;
+                return group.toString() !== leaveGroupDto.groupId;
             },
         );
         const groupAfterLeaveGroup = group.members.filter(member => {
-            return member !== userId;
+            return member.toString() !== userId;
         });
         user.groupMembership = userAfterLeaveGroup;
         group.members = groupAfterLeaveGroup;

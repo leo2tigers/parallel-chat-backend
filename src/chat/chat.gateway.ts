@@ -33,7 +33,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @SubscribeMessage('send-message')
     async newMessage(socket: Socket, data: any) {
-        const user = await this.userService.getUserById(data.sender);
+        const user = await this.userService.getUserById(data.user);
         const newMessageDto: NewMessageDto = {
             message: data.message,
             sender: data.user,

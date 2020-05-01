@@ -9,9 +9,9 @@ import { UserService } from '../user/user.service';
 import { GroupService } from '../group/group.service';
 import { MessageService } from '../message/message.service';
 import { Socket, Server } from 'socket.io';
-import { NewMessageDto } from 'src/message/message.dto';
-import { CreateGroupDto } from 'src/group/group.dto';
-import { JoinOrLeaveGroupDto } from 'src/user/user.dto';
+import { NewMessageDto } from '../message/message.dto';
+import { CreateGroupDto } from '../group/group.dto';
+import { JoinOrLeaveGroupDto } from '../user/user.dto';
 
 @WebSocketGateway(10001)
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {

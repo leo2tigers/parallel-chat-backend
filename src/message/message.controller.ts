@@ -2,7 +2,7 @@ import { Controller, Get, Param, Post, Body, UseGuards } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { NewMessageDto } from './message.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { LoadUser } from 'src/decorators/user.decorator';
+import { LoadUser } from '../decorators/user.decorator';
 
 @Controller('message')
 export class MessageController {

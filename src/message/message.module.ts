@@ -18,5 +18,6 @@ import { PassportModule } from '@nestjs/passport';
     ],
     controllers: [MessageController],
     providers: [MessageService],
+    exports: [MessageService],
 })
 export class MessageModule {}

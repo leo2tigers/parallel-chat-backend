@@ -6,6 +6,8 @@ import { GroupModule } from './group/group.module';
 import { UserModule } from './user/user.module';
 import { MessageModule } from './message/message.module';
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
+import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
     imports: [
@@ -21,8 +23,9 @@ import { AuthModule } from './auth/auth.module';
             }),
         }),
         AuthModule,
+        ChatModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, ChatGateway],
 })
 export class AppModule {}

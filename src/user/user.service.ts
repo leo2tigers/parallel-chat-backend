@@ -110,7 +110,7 @@ export class UserService {
         group.members.push(userId);
         return {
             updatedUser: await user.save(),
-            updatedGroup: await group.save()
+            updatedGroup: await group.save(),
         };
     }
 
@@ -144,7 +144,7 @@ export class UserService {
         }
         return {
             updatedUser: await user.save(),
-            updatedGroup: groupRet
+            updatedGroup: groupRet,
         };
     }
 

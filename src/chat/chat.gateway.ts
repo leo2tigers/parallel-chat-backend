@@ -13,7 +13,7 @@ import { NewMessageDto } from '../message/message.dto';
 import { CreateGroupDto } from '../group/group.dto';
 import { JoinOrLeaveGroupDto } from '../user/user.dto';
 
-@WebSocketGateway(10001)
+@WebSocketGateway(10001, { transports: ['websocket'] })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     constructor(
         private readonly userService: UserService,

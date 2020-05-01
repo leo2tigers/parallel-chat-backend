@@ -14,6 +14,7 @@ import {
     JoinOrLeaveGroupDto,
 } from './user.dto';
 import { GroupService } from '../group/group.service';
+import { Group } from '../interface/group.interface';
 
 @Injectable()
 export class UserService {
@@ -107,7 +108,10 @@ export class UserService {
         }
         user.groupMembership.push({ group: joinGroupDto.groupId });
         group.members.push(userId);
-        return [await user.save(), await group.save()];
+        return {
+            updatedUser: await user.save(),
+            updatedGroup: await group.save()
+        };
     }
 
     async leaveGroup(userId: string, leaveGroupDto: JoinOrLeaveGroupDto) {
@@ -130,15 +134,18 @@ export class UserService {
         });
         user.groupMembership = userAfterLeaveGroup;
         group.members = groupAfterLeaveGroup;
-        let groupRet: any;
+        let groupRet: Group;
         if (groupAfterLeaveGroup.length === 0) {
             groupRet = await this.groupService.deleteGroupById(
                 leaveGroupDto.groupId,
             );
         } else {
-            groupRet = group.save();
+            groupRet = await group.save();
         }
-        return [await user.save(), groupRet];
+        return {
+            updatedUser: await user.save(),
+            updatedGroup: groupRet
+        };
     }
 
     async updateLastReadOfAGroup(userId: string, groupId: string) {

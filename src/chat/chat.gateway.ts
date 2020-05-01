@@ -122,12 +122,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
         const groupName = (await this.groupService.getGroupByGroupId(data.group)).groupName
 
-        const resLeave = await this.userService.leaveGroup(
-            data.user,
-            leaveGroupDto,
-        );
         const resMsg = await this.messageService.newMessage(newMessageDto);
-
+        
         const leaveGroupData = {
             user: data.user,
             userDisplayname: user.name,
@@ -136,6 +132,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
             leaveTime: resMsg.createdAt,
         };
         this.server.to(data.group).emit('user-leave', leaveGroupData);
+
+        const resLeave = await this.userService.leaveGroup(
+            data.user,
+            leaveGroupDto,
+        );
         socket.leave(data.group);
         console.log(
             `[UserLeaveGroup]:\t${user.username} left ${resLeave.updatedGroup.groupName}`,
